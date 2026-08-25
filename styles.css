@@ -110,7 +110,6 @@ section.fade-in {
 #contact .section-heading::before,
 #contact .section-heading::after {
   color: rgba(246, 249, 252, 0.55);
-  background: rgba(246, 249, 252, 0.4);
 }
 
 #contact .section-heading {
@@ -935,11 +934,26 @@ section:nth-child(even) {
   font-size: 0.72rem;
   padding: 4px 10px;
   border-radius: var(--radius-sm);
-  white-space: nowrap;
+  white-space: normal;
+  width: max-content;
+  max-width: 160px;
+  text-align: center;
+  line-height: 1.35;
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.15s ease;
   z-index: 10;
+}
+
+.skill-tag:first-child::after {
+  left: 0;
+  transform: none;
+}
+
+.skill-tag:last-child::after {
+  left: auto;
+  right: 0;
+  transform: none;
 }
 
 .skill-tag:hover::after {
