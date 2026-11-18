@@ -572,50 +572,6 @@ section:nth-child(even) {
   border-top-color: var(--amber);
 }
 
-.project-thumb {
-  position: relative;
-  height: 170px;
-  overflow: hidden;
-  background: var(--surface);
-}
-
-.thumb-chrome {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 28px;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  padding: 0 10px;
-  background: rgba(32, 42, 68, 0.55);
-  backdrop-filter: blur(2px);
-  z-index: 2;
-}
-
-.thumb-chrome span {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: rgba(246, 249, 252, 0.55);
-}
-
-.project-thumb--portfolio .thumb-chrome {
-  background: rgba(246, 249, 252, 0.08);
-}
-
-.project-thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.4s ease;
-}
-
-.project-card:hover .project-thumb img {
-  transform: scale(1.04);
-}
-
 /* ── LABELS: one shared style for every small pill on the page
    (project tags, experience/education badges, certificate dates) ── */
 .project-tag,
@@ -634,45 +590,13 @@ section:nth-child(even) {
 }
 
 .project-tag {
-  position: absolute;
-  top: 5px;
-  right: 10px;
-  left: auto;
-  z-index: 3;
+  display: inline-block;
+  margin-bottom: 0.75rem;
 }
 
-
-/* portfolio card cover */
-.project-thumb--portfolio {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 60%, var(--navy-hover) 100%);
-}
-
-.novel-cover {
-  text-align: center;
-  padding: 1rem;
-}
-
-.novel-cover-title {
-  font-family: var(--font-mono);
-  font-size: 1.15rem;
-  font-weight: 500;
-  color: var(--surface);
-  line-height: 1.3;
-  margin-bottom: 0.5rem;
-}
-
-.novel-cover-sub {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  color: rgba(246, 249, 252, 0.6);
-  letter-spacing: 0.05em;
-}
 
 .project-body {
-  padding: 1.1rem 1.25rem;
+  padding: 1.35rem 1.25rem 1.1rem;
   flex: 1;
 }
 
