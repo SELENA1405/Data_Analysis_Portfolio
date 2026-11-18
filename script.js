@@ -162,6 +162,53 @@ document.querySelectorAll('[data-stagger]').forEach((group) => {
 });
 
 
+/* ── CASCADE: tags pop in one by one, after their card/row appears ── */
+document.querySelectorAll('[data-cascade]').forEach((list) => {
+  const item = list.closest('[data-stagger] > *');
+  const base = item ? (parseInt(item.style.getPropertyValue('--i') || '0', 10) * 110 + 380) : 250;
+  [...list.children].forEach((child, i) => {
+    child.style.setProperty('--d', `${base + i * 45}ms`);
+  });
+});
+
+
+/* ── DETAILS: smooth open + auto-open when scrolled into view ── */
+const detailsEls = document.querySelectorAll('.timeline-details');
+
+detailsEls.forEach((details) => {
+  details.querySelectorAll('li').forEach((li, i) => li.style.setProperty('--i', i));
+
+  details.addEventListener('toggle', () => {
+    if (!details.open) return;
+    const list = details.querySelector('ul');
+    if (list) list.style.setProperty('--h', `${list.scrollHeight}px`);
+
+    // restart the opening animation
+    details.classList.remove('opening');
+    void details.offsetWidth;
+    details.classList.add('opening');
+    clearTimeout(details._openTimer);
+    details._openTimer = setTimeout(() => details.classList.remove('opening'), 1400);
+  });
+});
+
+const detailsObserver = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      const details = entry.target;
+      detailsObserver.unobserve(details);   // only once: if closed later, it stays closed
+
+      // wait for the card's own entrance before opening
+      setTimeout(() => { details.open = true; }, reduceMotion ? 0 : 650);
+    });
+  },
+  { rootMargin: '0px 0px -30% 0px', threshold: 0 }
+);
+
+detailsEls.forEach((details) => detailsObserver.observe(details));
+
+
 /* ── SCROLL-TRIGGERED FADE-IN ── */
 const fadeEls = document.querySelectorAll('.fade-in');
 

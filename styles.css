@@ -1344,6 +1344,49 @@ footer {
 }
 
 
+/* ── cascades: tags inside a row/card pop in one after another ── */
+.js .fade-in:not(.visible) [data-cascade] > * {
+  opacity: 0;
+}
+
+.js .visible [data-cascade] > * {
+  animation: pop 0.45s var(--ease-out) backwards;
+  animation-delay: var(--d, 0ms);
+}
+
+@keyframes pop {
+  from { opacity: 0; transform: translateY(6px) scale(0.92); }
+}
+
+
+/* ── timeline diamonds spin into place ── */
+.js .visible .timeline-item .timeline-dot {
+  animation: dot-in 0.7s var(--ease-out) backwards;
+  animation-delay: calc(var(--i, 0) * 110ms + 350ms);
+}
+
+@keyframes dot-in {
+  from { opacity: 0; transform: rotate(-135deg) scale(0); }
+}
+
+
+/* ── "What I worked on" / coursework: smooth open, bullets cascade ── */
+.timeline-details.opening > ul {
+  overflow: hidden;
+  animation: expand 0.55s var(--ease-out);
+}
+
+@keyframes expand {
+  from { max-height: 0; opacity: 0; }
+  to   { max-height: var(--h, 400px); opacity: 1; }
+}
+
+.timeline-details.opening li {
+  animation: rise 0.45s var(--ease-out) backwards;
+  animation-delay: calc(var(--i, 0) * 70ms + 120ms);
+}
+
+
 /* ── reduced motion ── */
 @media (prefers-reduced-motion: reduce) {
   html {
