@@ -172,13 +172,23 @@ document.querySelectorAll('[data-cascade]').forEach((list) => {
 });
 
 
-/* ── DETAILS: smooth open + auto-open when scrolled into view ── */
+/* ── DETAILS: smooth open, auto-open in view, auto-close once scrolled past ── */
 const detailsEls = document.querySelectorAll('.timeline-details');
 
 detailsEls.forEach((details) => {
   details.querySelectorAll('li').forEach((li, i) => li.style.setProperty('--i', i));
 
+  // once a visitor opens/closes a list themselves, stop managing it
+  const summary = details.querySelector('summary');
+  if (summary) {
+    summary.addEventListener('click', () => {
+      details.dataset.manual = 'true';
+      clearTimeout(details._autoTimer);
+    });
+  }
+
   details.addEventListener('toggle', () => {
+    updateTimelines();
     if (!details.open) return;
     const list = details.querySelector('ul');
     if (list) list.style.setProperty('--h', `${list.scrollHeight}px`);
@@ -192,21 +202,102 @@ detailsEls.forEach((details) => {
   });
 });
 
-const detailsObserver = new IntersectionObserver(
+// close a list without the page jumping: if it sits above the screen,
+// shift the scroll position by exactly the height it loses
+function autoClose(details) {
+  if (!details.open) return;
+  const above  = details.getBoundingClientRect().bottom < 0;
+  const before = details.offsetHeight;
+  details.open = false;
+  if (above) {
+    const lost = before - details.offsetHeight;
+    window.scrollTo({ top: window.scrollY - lost, behavior: 'instant' });
+  }
+}
+
+// opens when the list reaches the upper ~70% of the screen
+const detailsOpenObserver = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
-      if (!entry.isIntersecting) return;
       const details = entry.target;
-      detailsObserver.unobserve(details);   // only once: if closed later, it stays closed
+      if (details.dataset.manual) return;
 
-      // wait for the card's own entrance before opening
-      setTimeout(() => { details.open = true; }, reduceMotion ? 0 : 650);
+      clearTimeout(details._autoTimer);
+      if (entry.isIntersecting && !details.open) {
+        // first time: wait for the card's own entrance animation
+        const wait = reduceMotion ? 0 : (details.dataset.seen ? 150 : 650);
+        details.dataset.seen = 'true';
+        details._autoTimer = setTimeout(() => { details.open = true; }, wait);
+      }
     });
   },
   { rootMargin: '0px 0px -30% 0px', threshold: 0 }
 );
 
-detailsEls.forEach((details) => detailsObserver.observe(details));
+// closes once the list has left the screen completely
+const detailsCloseObserver = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      const details = entry.target;
+      if (details.dataset.manual || entry.isIntersecting) return;
+      clearTimeout(details._autoTimer);
+      autoClose(details);
+    });
+  },
+  { threshold: 0 }
+);
+
+detailsEls.forEach((details) => {
+  detailsOpenObserver.observe(details);
+  detailsCloseObserver.observe(details);
+});
+
+
+/* ── TIMELINE: a diamond travels down the line as you scroll ── */
+const DOT_CENTER = 23;   // .timeline-dot top (16px) + half its size (7px)
+const timelines = [...document.querySelectorAll('.timeline')].map((timeline) => {
+  const fill = document.createElement('span');
+  fill.className = 'timeline-fill';
+  const runner = document.createElement('span');
+  runner.className = 'timeline-runner';
+  fill.setAttribute('aria-hidden', 'true');
+  runner.setAttribute('aria-hidden', 'true');
+  timeline.prepend(fill, runner);
+  return { timeline, fill, runner, dots: [...timeline.querySelectorAll('.timeline-dot')] };
+});
+
+function updateTimelines() {
+  const anchor = window.innerHeight * 0.5;   // the runner follows the middle of the screen
+
+  timelines.forEach(({ timeline, fill, runner, dots }) => {
+    const rect  = timeline.getBoundingClientRect();
+    const start = DOT_CENTER;
+    const end   = Math.max(start, timeline.offsetHeight - 8);
+    const y     = Math.min(Math.max(anchor - rect.top, start), end);
+
+    runner.style.transform = `translateY(${y - 7}px) rotate(45deg)`;
+    fill.style.height = `${y - start}px`;
+
+    dots.forEach((dot) => {
+      const dotY = dot.parentElement.offsetTop + DOT_CENTER;
+      dot.classList.toggle('passed', y >= dotY - 1);
+    });
+  });
+}
+
+let timelineTicking = false;
+function requestTimelineUpdate() {
+  if (timelineTicking) return;
+  timelineTicking = true;
+  requestAnimationFrame(() => {
+    timelineTicking = false;
+    updateTimelines();
+  });
+}
+
+window.addEventListener('scroll', requestTimelineUpdate, { passive: true });
+window.addEventListener('resize', requestTimelineUpdate);
+updateTimelines();
 
 
 /* ── SCROLL-TRIGGERED FADE-IN ── */

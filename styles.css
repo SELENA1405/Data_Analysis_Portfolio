@@ -35,6 +35,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-anchor: none;   /* script keeps the view steady when a list auto-closes */
   font-size: 16px;
 }
 
@@ -694,6 +695,38 @@ section:nth-child(even) {
   background: var(--bg);
   border: 2.5px solid var(--navy);
   transform: rotate(45deg);
+  z-index: 1;
+  transition: background 0.3s ease;
+}
+
+/* filled once the travelling diamond has passed it */
+.timeline-dot.passed {
+  background: var(--navy);
+}
+
+/* solid navy line that grows behind the travelling diamond */
+.timeline-fill {
+  position: absolute;
+  left: 0;
+  top: 23px;               /* starts at the first diamond's centre */
+  width: 2px;
+  height: 0;
+  background: var(--navy);
+  border-radius: 1px;
+}
+
+/* the travelling diamond (moved by script.js on scroll) */
+.timeline-runner {
+  position: absolute;
+  top: 0;
+  left: -0.45rem;          /* lines up with .timeline-dot */
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  background: var(--amber);
+  box-shadow: 0 0 0 4px rgba(212, 162, 76, 0.2);
+  z-index: 2;
+  will-change: transform;
 }
 
 .timeline-card {
@@ -1173,6 +1206,10 @@ footer {
     left: -2rem;
   }
 
+  .timeline-runner {
+    left: -0.5rem;
+  }
+
   .skills-group {
     grid-template-columns: 1fr;
     gap: 0.6rem;
@@ -1384,6 +1421,18 @@ footer {
 .timeline-details.opening li {
   animation: rise 0.45s var(--ease-out) backwards;
   animation-delay: calc(var(--i, 0) * 70ms + 120ms);
+}
+
+
+/* ── travelling diamond appears with its section ── */
+.js .fade-in:not(.visible) .timeline-runner,
+.js .fade-in:not(.visible) .timeline-fill {
+  opacity: 0;
+}
+
+.timeline-runner,
+.timeline-fill {
+  transition: opacity 0.5s ease 0.6s;
 }
 
 
