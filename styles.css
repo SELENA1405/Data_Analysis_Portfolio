@@ -5,6 +5,10 @@
   --navy-hover:  #2d3a5e;
   --navy-soft:   #e6eaf3;
   --navy-soft-2: #d3d9ea;
+  /* amber: small accents only, for contrast against navy */
+  --amber:       #d4a24c;
+  --amber-deep:  #b07a1e;   /* for amber text on white */
+  --amber-light: #e8c27a;   /* for amber on navy */
   --text:        #202a44;
   --text-muted:  #5b6478;
   --text-light:  #8891a3;
@@ -91,8 +95,7 @@ section.fade-in {
   font-family: var(--font-mono);
   font-size: 0.8rem;
   font-weight: 500;
-  color: var(--navy-hover);
-  opacity: 0.55;
+  color: var(--amber-deep);
   letter-spacing: 0.04em;
 }
 
@@ -102,14 +105,13 @@ section.fade-in {
   left: 1.9rem;
   top: 0.55em;
   width: 0.8rem;
-  height: 1px;
-  background: var(--navy-hover);
-  opacity: 0.4;
+  height: 1.5px;
+  background: var(--amber);
 }
 
 #contact .section-heading::before,
 #contact .section-heading::after {
-  color: rgba(246, 249, 252, 0.55);
+  color: var(--amber-light);
 }
 
 #contact .section-heading {
@@ -295,7 +297,7 @@ body::before {
 .cursor {
   display: inline-block;
   animation: blink 1s step-end infinite;
-  color: var(--navy-hover);
+  color: var(--amber);
 }
 
 @keyframes blink {
@@ -368,8 +370,7 @@ body::before {
   position: absolute;
   width: 22px;
   height: 22px;
-  border: 2px solid var(--navy);
-  opacity: 0.65;
+  border: 2px solid var(--amber);
 }
 
 .hero-image-wrap .frame-corner--tl { top: -4px; left: -4px; border-right: none; border-bottom: none; }
@@ -568,7 +569,7 @@ section:nth-child(even) {
 .project-card:hover {
   transform: translateY(-5px);
   box-shadow: var(--shadow-md);
-  border-top-color: var(--navy);
+  border-top-color: var(--amber);
 }
 
 .project-thumb {
@@ -1112,9 +1113,9 @@ section:nth-child(even) {
 }
 
 .contact-btn:hover {
-  background: var(--surface);
+  background: var(--amber-light);
   color: var(--navy);
-  border-color: var(--surface);
+  border-color: var(--amber-light);
   transform: translateY(-2px);
   box-shadow: var(--shadow-sm);
 }
@@ -1377,7 +1378,7 @@ footer {
 }
 
 .js .visible .section-heading::before {
-  opacity: 0.55;
+  opacity: 1;
 }
 
 .js .section-heading::after {
