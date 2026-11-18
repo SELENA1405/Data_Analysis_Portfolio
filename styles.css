@@ -971,6 +971,13 @@ section:nth-child(even) {
   opacity: 1;
 }
 
+/* touch screens can't hover, and the hidden tooltips would widen the page */
+@media (hover: none), (max-width: 768px) {
+  .skill-tag::after {
+    display: none;
+  }
+}
+
 
 /* ── CERTIFICATIONS ── */
 .certs-grid {
