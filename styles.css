@@ -872,14 +872,18 @@ section:nth-child(even) {
 
 
 /* ── SKILLS ── */
+/* one row per group: name on the left, skills on the right */
 .skills-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 2.25rem 3rem;
+  border-top: 0.5px solid var(--border);
 }
 
-.skills-group--wide {
-  grid-column: 1 / -1;
+.skills-group {
+  display: grid;
+  grid-template-columns: 210px 1fr;
+  align-items: start;
+  gap: 1.5rem;
+  padding: 1.15rem 0;
+  border-bottom: 0.5px solid var(--border);
 }
 
 .skills-group-title {
@@ -891,22 +895,12 @@ section:nth-child(even) {
   font-weight: 500;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-  padding-bottom: 0.6rem;
-  border-bottom: 0.5px solid var(--border);
+  gap: 0.6rem;
+  min-height: 31px;   /* lines up with the first row of tags */
 }
 
 .skills-group-title svg {
   flex-shrink: 0;
-}
-
-/* item count, echoing the 01/02 section numbers */
-.skills-count {
-  margin-left: auto;
-  font-size: 0.7rem;
-  color: var(--text-light);
-  opacity: 0.8;
 }
 
 .skill-tags {
@@ -1258,8 +1252,9 @@ footer {
     left: -2rem;
   }
 
-  .skills-grid {
+  .skills-group {
     grid-template-columns: 1fr;
+    gap: 0.6rem;
   }
 
   .contact-links {
