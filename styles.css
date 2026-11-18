@@ -875,22 +875,7 @@ section:nth-child(even) {
 .skills-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
-}
-
-/* each group is a card, matching the fact / timeline cards */
-.skills-group {
-  background: var(--bg);
-  border: 0.5px solid var(--border);
-  border-left: 3px solid var(--navy-soft-2);
-  border-radius: var(--radius-md);
-  padding: 1.1rem 1.25rem 1.25rem;
-  transition: border-left-color var(--transition), box-shadow var(--transition);
-}
-
-.skills-group:hover {
-  border-left-color: var(--navy);
-  box-shadow: var(--shadow-sm);
+  gap: 2.25rem 3rem;
 }
 
 .skills-group--wide {
@@ -952,35 +937,6 @@ section:nth-child(even) {
   border-left-color: var(--navy);
   color: var(--text);
   transform: translateY(-1px);
-}
-
-/* coursework-level skills: dashed outline */
-.skill-tag--course {
-  background: var(--bg);
-  border: 1px dashed var(--navy-soft-2);
-  border-left: 2px dashed var(--navy-soft-2);
-}
-
-.skill-tag--course:hover {
-  border-style: dashed;
-}
-
-.skills-legend {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: 1.1rem;
-  font-size: 0.8rem;
-  color: var(--text-light);
-}
-
-.skills-legend .skill-tag {
-  padding: 1px 8px;
-  font-size: 0.7rem;
-}
-
-.skills-legend .skill-tag::after {
-  display: none;
 }
 
 /* Tooltip */
