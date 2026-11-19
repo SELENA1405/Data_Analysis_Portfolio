@@ -41,6 +41,49 @@ function type() {
 type();
 
 
+/* ── PHOTO LOADING STATE: shimmer until the image is ready ── */
+const photoWrap = document.querySelector('.hero-image-wrap');
+const photo     = photoWrap && photoWrap.querySelector('img');
+
+if (photo) {
+  const markLoaded = () => photoWrap.classList.add('is-loaded');
+  if (photo.complete && photo.naturalWidth) markLoaded();
+  else {
+    photo.addEventListener('load', markLoaded, { once: true });
+    photo.addEventListener('error', markLoaded, { once: true });   // never leave it shimmering
+  }
+}
+
+
+/* ── EMAIL: also copy the address, and say so ── */
+const copyStatus = document.querySelector('.copy-status');
+
+document.querySelectorAll('[data-copy]').forEach((btn) => {
+  btn.addEventListener('click', async () => {
+    const text = btn.dataset.copy;
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch {
+      return;   // clipboard blocked: the mailto link still opens as normal
+    }
+    const label = btn.querySelector('.contact-btn-label');
+    const original = label ? label.textContent : '';
+    if (label) label.textContent = 'Copied ✓';
+    btn.classList.add('is-copied');
+    if (copyStatus) {
+      copyStatus.textContent = `${text} copied to your clipboard`;
+      copyStatus.classList.add('is-visible');
+    }
+    clearTimeout(btn._copyTimer);
+    btn._copyTimer = setTimeout(() => {
+      if (label) label.textContent = original;
+      btn.classList.remove('is-copied');
+      if (copyStatus) copyStatus.classList.remove('is-visible');
+    }, 2200);
+  });
+});
+
+
 /* ── BACK TO TOP ── */
 const backToTopBtn = document.getElementById('back-to-top');
 
@@ -109,6 +152,17 @@ function moveNavIndicator() {
 
 window.addEventListener('resize', moveNavIndicator);
 
+let navClickLock = null;
+document.querySelectorAll('.nav-link[data-section]').forEach((link) => {
+  link.addEventListener('click', () => {
+    document.querySelectorAll('.nav-link').forEach((l) => l.classList.toggle('active', l === link));
+    moveNavIndicator();
+    // ignore section changes while the smooth scroll passes other sections
+    clearTimeout(navClickLock);
+    navClickLock = setTimeout(() => { navClickLock = null; }, 900);
+  });
+});
+
 
 /* ── ACTIVE NAV LINK ON SCROLL ── */
 const sections = document.querySelectorAll('main section[id]');
@@ -117,7 +171,7 @@ const navLinks = document.querySelectorAll('.nav-link[data-section]');
 const sectionObserver = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
-      if (entry.isIntersecting) {
+      if (entry.isIntersecting && !navClickLock) {
         navLinks.forEach((link) => {
           link.classList.toggle(
             'active',
