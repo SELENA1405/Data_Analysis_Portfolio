@@ -2,7 +2,7 @@
 
 Personal portfolio for **Data Analyst, Data Scientist and Machine Learning** roles.
 
-### 🔗 Live site: **[selena1405.github.io/Data_Analysis_Portfolio](https://selena1405.github.io/Data_Analysis_Portfolio/)**
+ 🔗 Live site: [selena1405.github.io/Data_Analysis_Portfolio](https://selena1405.github.io/Data_Analysis_Portfolio/)
 
 [![Portfolio preview](assets/preview.jpg)](https://selena1405.github.io/Data_Analysis_Portfolio/)
 
