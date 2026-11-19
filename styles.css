@@ -666,15 +666,32 @@ section:nth-child(even) {
   grid-column: 1 / -1;
   position: relative;
   overflow: visible;          /* let the preview's shadow show */
+  justify-content: center;    /* script.js sets min-height so hovering never resizes the card */
 }
 
-/* text keeps to the left so the preview has room on the right */
+/* at rest the text fills the card; on hover it slides left to make room for the preview */
 .project-card--featured .project-body,
 .project-card--featured .project-footer {
+  max-width: 100%;
+  transition: max-width 0.45s var(--ease-out);
+}
+
+.project-card--featured:hover .project-body,
+.project-card--featured:hover .project-footer,
+.project-card--featured:focus-within .project-body,
+.project-card--featured:focus-within .project-footer,
+.project-card--featured.measure-preview .project-body,
+.project-card--featured.measure-preview .project-footer {
   max-width: 54%;
 }
 
+.project-card--featured.measure-preview .project-body,
+.project-card--featured.measure-preview .project-footer {
+  transition: none;
+}
+
 .project-card--featured .project-body {
+  flex: none;                 /* keep text and links together, centred as one group */
   padding: 1.75rem 2rem 1rem;
 }
 
@@ -728,8 +745,8 @@ section:nth-child(even) {
   visibility: visible;
   transform: translateY(-50%) scale(1) rotate(0deg);
   transition:
-    opacity 0.25s ease,
-    transform 0.45s var(--ease-out),
+    opacity 0.3s ease 0.12s,
+    transform 0.5s var(--ease-out) 0.12s,
     visibility 0s;
 }
 

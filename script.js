@@ -84,6 +84,26 @@ document.querySelectorAll('[data-copy]').forEach((btn) => {
 });
 
 
+/* ── FEATURED PROJECT: reserve the hover height so the page never jumps ── */
+const featured = document.querySelector('.project-card--featured');
+const canHover = window.matchMedia('(hover: hover) and (min-width: 861px)');
+
+function sizeFeatured() {
+  if (!featured) return;
+  featured.style.minHeight = '';
+  if (!canHover.matches) return;
+  featured.classList.add('measure-preview');      // lay out as if hovered…
+  const hoverHeight = featured.offsetHeight;      // …measure…
+  featured.classList.remove('measure-preview');   // …and switch back
+  featured.style.minHeight = `${hoverHeight}px`;
+}
+
+sizeFeatured();
+window.addEventListener('resize', sizeFeatured);
+canHover.addEventListener('change', sizeFeatured);
+if (document.fonts) document.fonts.ready.then(sizeFeatured);   // re-measure once web fonts load
+
+
 /* ── BACK TO TOP ── */
 const backToTopBtn = document.getElementById('back-to-top');
 
